@@ -28,7 +28,6 @@ public class Interaction : MonoBehaviour
         
         if (!Input.GetButtonDown("Interact")) return;
         
-            
         inter.Interact();
     }
 }

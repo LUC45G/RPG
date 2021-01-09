@@ -33,11 +33,8 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float xSnap, ySnap;
 
-    public void MoveCamera(int xDir, int yDir)
+    public void MoveCamera(Scenario target)
     {
-        var p = cameraTransform.position;
-        p += xDir * xSnap * Vector3.right;
-        p += yDir * ySnap * Vector3.up;
-        cameraTransform.position = p;
+        cameraTransform.position = target.CameraPosition;
     }
 }

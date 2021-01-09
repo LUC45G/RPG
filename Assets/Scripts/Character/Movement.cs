@@ -84,16 +84,37 @@ public class Movement : MonoBehaviour
             current = myRb.position;
             yield return new WaitForEndOfFrame();
             if (!(t > 1)) continue;
-            myRb.position = initial;
+            current = initial;
             break;
         }
         
+        myRb.position = Round(current);
         myAnimator.SetBool("Walking", false);
         _canMove = true;
     }
 
-    public void ForceMovement(int x, int y)
+    public void ForceMovement(Vector3 position)
     {
-        myTransform.position += (gridSnap * x * Vector3.right) + ( gridSnap * y * Vector3.up);
+        myTransform.position = Round(position);
     }
+
+    private Vector3 Round(Vector3 vec)
+    {
+        var x = vec.x;
+        var y = vec.y;
+        var v = Vector3.zero;
+
+        var fdx = Mathf.Abs((int) (x * 10)) % 10;
+        var fdy = Mathf.Abs((int) (y * 10)) % 10;
+        
+        x = IsInRange(fdx, 3f, 7f) ? Mathf.FloorToInt(x) + .5f : Mathf.RoundToInt(x);
+        y = IsInRange(fdy, 3f, 7f) ? Mathf.FloorToInt(y) + .5f : Mathf.RoundToInt(y);
+
+        v.x = x;
+        v.y = y;
+        v.z = vec.z;
+        return v;
+    }
+
+    private bool IsInRange(float value, float min, float max) => value >= min && value <= max;
 }

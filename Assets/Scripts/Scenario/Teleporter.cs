@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Teleporter : Interactable
 {
-    [Range(-1, 1)] [SerializeField] private int x, y;
+    [SerializeField] private Scenario target;
     private Movement _player;
 
     private void Start()
@@ -16,7 +16,7 @@ public class Teleporter : Interactable
         if(!IsInteractable) return;
         base.Interact();
 
-        CameraMovement.Instance.MoveCamera(x, y);
-        _player.ForceMovement(x, y);
+        CameraMovement.Instance.MoveCamera(target);
+        _player.ForceMovement(target.SpawnPoint);
     }
 }
