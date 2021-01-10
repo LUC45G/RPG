@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Battlestates{START, PLAYERTURN, ENEMYTURN, WON, LOST}
+public enum Battlestates{START, PLAYERTURN, PLAYERTURN2, ENEMYTURN, WON, LOST}
 
 public class Gamemanager : MonoBehaviour
 {
@@ -13,11 +13,11 @@ public class Gamemanager : MonoBehaviour
     public Transform[] playerbattlestation;
     public Transform[] enemybattlestation;
     Enemy enemyunit;
-    Ally playerunit;
-
-    public battleHUD playerHUD;
+    public Ally playerunit;
+    public battleHUD[] playerHUD2;
     public battleHUD enemyHUD;
     public GameObject textannuncer;
+    public GameObject[] portraits;
     public Text Actiontext;
 
     // Start is called before the first frame update
@@ -29,16 +29,23 @@ public class Gamemanager : MonoBehaviour
 
     IEnumerator Setupbattle()
     {
-        GameObject playerGO = Instantiate(playersPrefabs[0], playerbattlestation[0]);
-        playerunit = playerGO.GetComponent<Ally>();
-
+        for ( int i = 0; i < playersPrefabs.Length; i++)
+        {
+            if (playersPrefabs[i] != null)
+            {
+                GameObject playerGO = Instantiate(playersPrefabs[i], playerbattlestation[i]);
+                playerunit = playerGO.GetComponent<Ally>();
+                playerHUD2[i].setHUD(playerunit);
+            } 
+        }
+        
         GameObject enemyGO = Instantiate(enemyPrefabs[0], enemybattlestation[0]);
         enemyunit = enemyGO.GetComponent<Enemy>();
 
         textannuncer.SetActive(true);
         Actiontext.text = "El " + enemyunit.enemyname + " se acerca...";
 
-        playerHUD.setHUD(playerunit);
+        //playerHUD.setHUD(playerunit);
         enemyHUD.setenemyHUD(enemyunit);
 
         yield return new WaitForSeconds(2f);
@@ -48,6 +55,26 @@ public class Gamemanager : MonoBehaviour
 
     IEnumerator Playerturn()
     {
+        for (int i = 0; i < playersPrefabs.Length; i++)
+        {
+            if (playersPrefabs[i] != null)
+            {
+                portraits[i].SetActive(false);
+            }
+        }
+        if (estado == Battlestates.PLAYERTURN)
+        {
+            GameObject playerGO = playersPrefabs[0];
+            playerunit = playerGO.GetComponent<Ally>();
+            portraits[0].SetActive(true);
+        }
+        else if (estado == Battlestates.PLAYERTURN2)
+        {
+            GameObject playerGO = playersPrefabs[1];
+            playerunit = playerGO.GetComponent<Ally>();
+            portraits[1].SetActive(true);
+        }
+
         playerunit.isdefend = false;
         textannuncer.SetActive(true);
         Actiontext.text = "¿Ya puedo irme a casa?";
@@ -63,6 +90,10 @@ public class Gamemanager : MonoBehaviour
         textannuncer.SetActive(true);
 
         yield return new WaitForSeconds(1f);
+        int objetivo = Random.Range(0,2);
+        Debug.Log(objetivo);
+        GameObject playerGO = playersPrefabs[objetivo];
+        playerunit = playerGO.GetComponent<Ally>();
 
         if (playerunit.isdefend == true)
         {
@@ -75,7 +106,7 @@ public class Gamemanager : MonoBehaviour
             isdead = playerunit.takedamage(enemyunit.str);
         }
         
-        playerHUD.sethp(playerunit.currentHP);
+        playerHUD2[objetivo].sethp(playerunit.currentHP);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -93,7 +124,7 @@ public class Gamemanager : MonoBehaviour
 
     public void OnAttackbutton()
     {
-        if (estado != Battlestates.PLAYERTURN)
+        if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
         }
@@ -102,7 +133,7 @@ public class Gamemanager : MonoBehaviour
 
     public void OnSpecialbutton()
     {
-        if (estado != Battlestates.PLAYERTURN)
+        if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
         }
@@ -111,7 +142,7 @@ public class Gamemanager : MonoBehaviour
 
     public void OnDefendbutton()
     {
-        if (estado != Battlestates.PLAYERTURN)
+        if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
         }
@@ -120,7 +151,7 @@ public class Gamemanager : MonoBehaviour
 
     public void OnItembutton()
     {
-        if (estado != Battlestates.PLAYERTURN)
+        if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
         }
@@ -129,16 +160,33 @@ public class Gamemanager : MonoBehaviour
 
     IEnumerator PlayerItems()
     {
-        playerunit.heal(20);
-        playerHUD.sethp(playerunit.currentHP);
+        if (estado == Battlestates.PLAYERTURN)
+        {
+            playerunit.heal(20);
+            playerHUD2[0].sethp(playerunit.currentHP);
+            textannuncer.SetActive(true);
 
-        textannuncer.SetActive(true);
-        Actiontext.text = "Tremenda medialina, te curas 20 de vida!";
+            Actiontext.text = "Tremenda medialuna, te curas 20 de vida!";
 
-        yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(2f);
+        
+            estado = Battlestates.PLAYERTURN2;
+            StartCoroutine(Playerturn());
+        }
+        else if (estado == Battlestates.PLAYERTURN2)
+        {
+            playerunit.heal(20);
+            playerHUD2[1].sethp(playerunit.currentHP);
 
-        estado = Battlestates.ENEMYTURN;
-        StartCoroutine(Enemyturn());
+            textannuncer.SetActive(true);
+
+            Actiontext.text = "Tremenda medialuna, te curas 20 de vida!";
+
+            yield return new WaitForSeconds(2f);
+        
+            estado = Battlestates.ENEMYTURN;
+            StartCoroutine(Enemyturn());
+        }
     }
 
     IEnumerator playerespecial()
@@ -147,7 +195,15 @@ public class Gamemanager : MonoBehaviour
 
         if (CanUseEspecial)
         {
-            playerHUD.setenergy(playerunit.currentEnergy);
+            if (estado == Battlestates.PLAYERTURN)
+            {
+                playerHUD2[0].setenergy(playerunit.currentEnergy);
+            }
+            else if (estado == Battlestates.PLAYERTURN2)
+            {
+                playerHUD2[1].setenergy(playerunit.currentEnergy);
+            }
+            
 
             bool isdead = enemyunit.takedamage(playerunit.str*2);
             enemyHUD.sethp(enemyunit.currentHP);
@@ -182,20 +238,30 @@ public class Gamemanager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-        estado = Battlestates.ENEMYTURN;
-        StartCoroutine(Enemyturn());
+         if (estado == Battlestates.PLAYERTURN)
+        {
+            estado = Battlestates.PLAYERTURN2;
+            StartCoroutine(Playerturn());
+        }
+        else if (estado == Battlestates.PLAYERTURN2)
+        {
+            estado = Battlestates.ENEMYTURN;
+            StartCoroutine(Enemyturn());
+        }
+        
     }
 
     IEnumerator playerattack()
     {
         bool isdead = enemyunit.takedamage(playerunit.str);
         enemyHUD.sethp(enemyunit.currentHP);
-        
+        textannuncer.SetActive(true);
         Actiontext.text = "Haces " + playerunit.str + " de daño!";
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
         textannuncer.SetActive(false);
+
         if(isdead)
         {
             //terminar combate
@@ -205,8 +271,17 @@ public class Gamemanager : MonoBehaviour
         else
         {
             //pasar turno
-            estado = Battlestates.ENEMYTURN;
-            StartCoroutine(Enemyturn());
+            if (estado == Battlestates.PLAYERTURN)
+            {
+                estado = Battlestates.PLAYERTURN2;
+                StartCoroutine(Playerturn());
+            }
+            else if (estado == Battlestates.PLAYERTURN2)
+            {
+                estado = Battlestates.ENEMYTURN;
+                StartCoroutine(Enemyturn());
+            }
+            
         }
         
     }

@@ -5,15 +5,15 @@ using UnityEngine.UI;
 
 public class battleHUD : MonoBehaviour
 {
-    public Text nameText;
-
     public Slider HPSlider;
 
     public Slider energySlider;
 
+    public GameObject HUDvisible;
+
     public void setHUD(Ally ally)
     {
-        nameText.text = ally.charaname;
+        HUDvisible.SetActive(true);
         HPSlider.maxValue = ally.maxHP;
         HPSlider.value = ally.currentHP;
         energySlider.maxValue = ally.maxEnergy;

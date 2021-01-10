@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Top Down.unity
     guid: 706451a39780c0347a9355aac4c5d552
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Combate.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
