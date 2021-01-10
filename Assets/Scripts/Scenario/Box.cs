@@ -29,7 +29,7 @@ public class Box : Interactable
 
         
         var direction = Vector3.right * (xDir * xSnap) + Vector3.up * (yDir * ySnap);
-        Debug.Log($"{direction} | {yDiff} - {yDir}");
+        //Debug.Log($"{direction} | {yDiff} - {yDir}");
         var desiredPosition = myPos + direction;
         var snap = xDir > 0 ? xSnap : ySnap;
         

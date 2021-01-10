@@ -9,4 +9,25 @@ public class Enemy : MonoBehaviour
     public int currentHP;
     public int str;
     public int vel;
+
+    public bool takedamage(int damege)
+    {
+        currentHP -= damege;
+
+        if (currentHP <= 0)
+        {
+            if (currentHP == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
 }

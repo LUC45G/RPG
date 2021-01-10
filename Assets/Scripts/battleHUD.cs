@@ -20,8 +20,19 @@ public class battleHUD : MonoBehaviour
         energySlider.value = ally.currentEnergy;
     }
 
+    public void setenemyHUD(Enemy enemy)
+    {
+        HPSlider.maxValue = enemy.maxHP;
+        HPSlider.value = enemy.currentHP;
+    }
+
     public void sethp(int value)
     {
         HPSlider.value = value;
+    }
+
+    public void setenergy(int value)
+    {
+        energySlider.value = value;
     }
 }
