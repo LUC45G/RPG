@@ -4,6 +4,8 @@ using UnityEngine;
 public class Teleporter : Interactable
 {
     [SerializeField] private Scenario target;
+    [SerializeField] private bool savePosition;
+    [SerializeField] private Transform mySpawn;
     private Movement _player;
 
     private void Start()
@@ -17,6 +19,7 @@ public class Teleporter : Interactable
         base.Interact();
 
         CameraMovement.Instance.MoveCamera(target);
+        if (savePosition) mySpawn.position = _player.transform.position;
         _player.ForceMovement(target.SpawnPoint);
     }
 }

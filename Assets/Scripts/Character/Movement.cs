@@ -1,4 +1,5 @@
 using System.Collections;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -12,7 +13,7 @@ public class Movement : MonoBehaviour
     [SerializeField] private SpriteRenderer mySpriteRenderer;
     [SerializeField] private Rigidbody2D myRb;
     [SerializeField] private Animator myAnimator;
-    
+
     private Transform myTransform;
     private bool _canMove;
     
@@ -53,7 +54,10 @@ public class Movement : MonoBehaviour
         get
         {
             var current = myTransform.position;
-            return Physics2D.Raycast(current, _lastMovement, gridSnap).collider;
+            //Debug.DrawRay(current, _lastMovement * gridSnap, Color.blue);
+            var atSnap = Physics2D.Raycast(current, _lastMovement, gridSnap).collider;
+            var atDouble = Physics2D.Raycast(current, _lastMovement, gridSnap * 2).collider;
+            return atSnap ? atSnap : atDouble;
         }
     }
 

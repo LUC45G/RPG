@@ -21,8 +21,11 @@ public class Interactable : MonoBehaviour
 
         IEnumerator ReenableInteraction()
         {
-            yield return new WaitForSeconds(cooldown);
-            IsInteractable = true;
+            if (cooldown < 10)
+            {
+                yield return new WaitForSeconds(cooldown);
+                IsInteractable = true;
+            }
         }
     }
 

@@ -24,16 +24,21 @@ public class Box : Interactable
         var xDiff = Mathf.Abs(myPos.x - player.x);
         var yDiff = Mathf.Abs(myPos.y - player.y);
         
-        var xDir = xDiff > .75f ? Mathf.Sign(myPos.x - player.x) : 0f;
-        var yDir = yDiff > .75f ? Mathf.Sign(myPos.y - player.y) : 0f;
+        var xDir = xDiff > .45f ? Mathf.Sign(myPos.x - player.x) : 0f;
+        var yDir = yDiff > .45f ? Mathf.Sign(myPos.y - player.y) : 0f;
 
         
         var direction = Vector3.right * (xDir * xSnap) + Vector3.up * (yDir * ySnap);
-        //Debug.Log($"{direction} | {xDir} - {yDir}");
+        //Debug.Log($"{direction} | {yDiff} - {yDir}");
         var desiredPosition = myPos + direction;
         var snap = xDir > 0 ? xSnap : ySnap;
         
-        if(Physics2D.Raycast(myPos, direction, snap).collider) return;
+        var c = Physics2D.Raycast(myPos, direction, snap).collider;
+        
+        if(c) {
+            Debug.Log(c.name);
+            return;
+        }
         
         transform.position = desiredPosition;
 
