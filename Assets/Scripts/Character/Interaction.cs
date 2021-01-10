@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using NUnit.Framework;
 using UnityEngine;
 
 public class Interaction : MonoBehaviour
@@ -11,19 +10,18 @@ public class Interaction : MonoBehaviour
     
     private void Update()
     {
-        if(!movement.LookingTarget) 
+        if(!movement.LookingTarget) return;
+        var inter = movement.LookingTarget.GetComponent<Interactable>();
+
+        if (!inter)
         {
             if (!_lastInter) return;
-                    
+            
             _lastInter.Unhover();
             _lastInter = null;
             return;
         }
-        
-        var inter = movement.LookingTarget.GetComponent<Interactable>();
-        
-        if (!inter) return;
-        
+
         inter.Hover();
         _lastInter = inter;
         
