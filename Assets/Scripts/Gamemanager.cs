@@ -7,6 +7,7 @@ public enum Battlestates{START, PLAYERTURN, PLAYERTURN2, ENEMYTURN, WON, LOST}
 
 public class Gamemanager : MonoBehaviour
 {
+    [SerializeField] private Animator[] animaciones;
     public Battlestates estado;
     public GameObject[] playersPrefabs;
     public GameObject[] enemyPrefabs;
@@ -37,6 +38,7 @@ public class Gamemanager : MonoBehaviour
                 GameObject playerGO = Instantiate(playersPrefabs[i], playerbattlestation[i]);
                 playerunit = playerGO.GetComponent<Ally>();
                 playerHUD2[i].setHUD(playerunit);
+                animaciones[i] = playerunit.animacionpersonaje;
             } 
         }
         
@@ -46,7 +48,6 @@ public class Gamemanager : MonoBehaviour
         textannuncer.SetActive(true);
         Actiontext.text = "El " + enemyunit.enemyname + " se acerca...";
 
-        //playerHUD.setHUD(playerunit);
         enemyHUD.setenemyHUD(enemyunit);
 
         yield return new WaitForSeconds(2f);
@@ -222,13 +223,16 @@ public class Gamemanager : MonoBehaviour
             if (estado == Battlestates.PLAYERTURN)
             {
                 playerHUD2[0].setenergy(playerunit.currentEnergy);
+                sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.grapespecial);
+                animaciones[0].SetBool("especial", true);
             }
             else if (estado == Battlestates.PLAYERTURN2)
             {
                 playerHUD2[1].setenergy(playerunit.currentEnergy);
+                sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.tijera);
+                animaciones[1].SetBool("especial", true);
             }
             
-
             bool isdead = enemyunit.takedamage(playerunit.str*2);
             enemyHUD.sethp(enemyunit.currentHP);
 
@@ -236,10 +240,32 @@ public class Gamemanager : MonoBehaviour
             Actiontext.text = "Haces " + playerunit.str*2 + " de daño!";
 
             yield return new WaitForSeconds(2f);
+            animaciones[1].SetBool("especial", false);
+            animaciones[0].SetBool("especial", false);
+            if(isdead)
+            {
+            //terminar combate
+                estado = Battlestates.WON;
+                Endbattle();
+            }
+            else
+            {
+            //pasar turno
+                if (estado == Battlestates.PLAYERTURN)
+                {
+                    estado = Battlestates.PLAYERTURN2;
+                    StartCoroutine(Playerturn());
+                }
+                    else if (estado == Battlestates.PLAYERTURN2)
+                {
+                    estado = Battlestates.ENEMYTURN;
+                    StartCoroutine(Enemyturn());
+                }
+            }
 
 
-            estado = Battlestates.ENEMYTURN;
-            StartCoroutine(Enemyturn());
+
+            
         }
         else
         {
@@ -282,8 +308,20 @@ public class Gamemanager : MonoBehaviour
         textannuncer.SetActive(true);
         Actiontext.text = "Haces " + playerunit.str + " de daño!";
 
-        yield return new WaitForSeconds(1f);
-
+            if (estado == Battlestates.PLAYERTURN)
+            {
+                sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.engrapadora);
+                animaciones[0].SetBool("attack", true);
+            }
+            else if (estado == Battlestates.PLAYERTURN2)
+            {
+                sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.tijeraattack);
+                animaciones[1].SetBool("attack", true);
+            }
+        
+        yield return new WaitForSeconds(3f);
+        animaciones[1].SetBool("attack", false);
+        animaciones[0].SetBool("attack", false);
         textannuncer.SetActive(false);
 
         yield return new WaitForSeconds(0.5f);

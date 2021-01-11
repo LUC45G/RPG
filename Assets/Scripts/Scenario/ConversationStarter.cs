@@ -18,6 +18,7 @@ public class ConversationStarter : Interactable
 
     public override void Interact()
     {
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.dialogo);
         if(!IsInteractable) return;
         base.Interact();
 
