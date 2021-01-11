@@ -22,6 +22,7 @@ public class Enemy : MonoBehaviour
             }
             else
             {
+                currentHP = maxHP;
                 return false;
             }
         }
