@@ -10,9 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 91c8fd8a04b94e34eb5d4f5be431b0d9, type: 3}
-  m_Name: test
+  m_Name: Puzzle Intro LP
   m_EditorClassIdentifier: 
   conversation:
-  - manager:hi there
-  - shortpants:hello
-  - longpants:good morning sir
+  - shortpants:Where are the stappler and the sissors?
+  - longpants:The Shelf next to the window.
+  - shortpants:Whats with this mess! Someone should be fired!
+  - longpants:Actually, it's your task clean this...
+  - shortpants:Then it's a miracle you are here!
+  - longpants:. . . Definetly, I hate you. . .

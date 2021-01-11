@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91c8fd8a04b94e34eb5d4f5be431b0d9, type: 3}
+  m_Name: intro
+  m_EditorClassIdentifier: 
+  conversation:
+  - shortpants:Another day in the Office, just about to g.-
+  - manager:Shorty!
+  - shortpants:Ugh...Yeah boss?
+  - manager:You didn't do your paperwork last night, FOR ALMOST A MONTH!
+  - shortpants:!!!
+  - shortpants:I can explain boss.
+  - manager:Don't excuse yourself, go with Betty and finish your work.
+  - shortpants:But.-
+  - manager:NOW!
+  - shortpants:*Sigh*
+  - manager:Remember, the door on the left is for supplies, the right is her office.
+  - shortpants:Hey I'm silly, but I remember my own office!
+  - manager:Really? So Where is the cup you were asking about two days ago?
+  - shortpants:...
+  - manager:Thats what i thought, now go to work, don't meke me say it twice.
+  - shortpants:*inintenligle mumble*

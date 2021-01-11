@@ -16,6 +16,7 @@ public class Movement : MonoBehaviour
 
     private Transform myTransform;
     private bool _canMove;
+    private Coroutine _movementCoroutine;
     
     private void Awake()
     {
@@ -71,7 +72,7 @@ public class Movement : MonoBehaviour
         _lastMovement = dir * sign;
         
         _canMove = false;
-        StartCoroutine(MoveTowards(target));
+        _movementCoroutine = StartCoroutine(MoveTowards(target));
     }
 
     private IEnumerator MoveTowards(Vector3 target)
@@ -95,10 +96,17 @@ public class Movement : MonoBehaviour
         myRb.position = Round(current);
         myAnimator.SetBool("Walking", false);
         _canMove = true;
+        _movementCoroutine = null;
     }
 
     public void ForceMovement(Vector3 position)
     {
+        if(_movementCoroutine != null) StopCoroutine(_movementCoroutine);
+        
+        _movementCoroutine = null;
+        myAnimator.SetBool("Walking", false);
+        _canMove = true;
+        
         myTransform.position = Round(position);
     }
 
