@@ -46,11 +46,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   charaname: Lowpants
   maxHP: 30
-  currentHP: 15
+  currentHP: 30
   str: 20
   vel: 15
   maxEnergy: 25
-  currentEnergy: 5
+  currentEnergy: 25
   isdefend: 0
 --- !u!1 &2944879550789318580
 GameObject:

@@ -18,6 +18,7 @@ public class Gamemanager : MonoBehaviour
     public battleHUD enemyHUD;
     public GameObject textannuncer;
     public GameObject[] portraits;
+    public GameObject[] ationbuttons;
     public Text Actiontext;
 
     // Start is called before the first frame update
@@ -53,6 +54,13 @@ public class Gamemanager : MonoBehaviour
         StartCoroutine (Playerturn());
     }
 
+    public void disablebuttons()
+    {
+        for (int i = 0; i < ationbuttons.Length; i++)
+        {
+            ationbuttons[i].GetComponent<Button>().interactable = false;
+        }
+    }
     IEnumerator Playerturn()
     {
         for (int i = 0; i < playersPrefabs.Length; i++)
@@ -61,6 +69,10 @@ public class Gamemanager : MonoBehaviour
             {
                 portraits[i].SetActive(false);
             }
+        }
+        for (int i = 0; i < ationbuttons.Length; i++)
+        {
+            ationbuttons[i].GetComponent<Button>().interactable = true;
         }
         if (estado == Battlestates.PLAYERTURN)
         {
@@ -87,13 +99,15 @@ public class Gamemanager : MonoBehaviour
     IEnumerator Enemyturn()
     {
         bool isdead;
-        textannuncer.SetActive(true);
 
-        yield return new WaitForSeconds(1f);
         int objetivo = Random.Range(0,2);
         Debug.Log(objetivo);
         GameObject playerGO = playersPrefabs[objetivo];
         playerunit = playerGO.GetComponent<Ally>();
+
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.golpegolem);
+        yield return new WaitForSeconds(3f);
+        textannuncer.SetActive(true);
 
         if (playerunit.isdefend == true)
         {
@@ -124,6 +138,8 @@ public class Gamemanager : MonoBehaviour
 
     public void OnAttackbutton()
     {
+        disablebuttons();
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.click);
         if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
@@ -133,6 +149,8 @@ public class Gamemanager : MonoBehaviour
 
     public void OnSpecialbutton()
     {
+        disablebuttons();
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.click);
         if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
@@ -142,6 +160,8 @@ public class Gamemanager : MonoBehaviour
 
     public void OnDefendbutton()
     {
+        disablebuttons();
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.click);
         if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
@@ -151,6 +171,10 @@ public class Gamemanager : MonoBehaviour
 
     public void OnItembutton()
     {
+        disablebuttons();
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.click);
+
+        sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.medialuna);
         if (estado != Battlestates.PLAYERTURN && estado != Battlestates.PLAYERTURN2)
         {
             return;
@@ -258,10 +282,11 @@ public class Gamemanager : MonoBehaviour
         textannuncer.SetActive(true);
         Actiontext.text = "Haces " + playerunit.str + " de daño!";
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         textannuncer.SetActive(false);
 
+        yield return new WaitForSeconds(0.5f);
         if(isdead)
         {
             //terminar combate
