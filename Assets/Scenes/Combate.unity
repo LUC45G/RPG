@@ -1645,7 +1645,7 @@ MonoBehaviour:
   HPSlider: {fileID: 1968070210}
   energySlider: {fileID: 1651048501}
   HUDvisible: {fileID: 685613705}
-  textovidajefe: {fileID: 1906593458}
+  textovidajefe: {fileID: 0}
 --- !u!1 &727764589
 GameObject:
   m_ObjectHideFlags: 0
@@ -3954,7 +3954,7 @@ MonoBehaviour:
   HPSlider: {fileID: 2038942167}
   energySlider: {fileID: 1069288265}
   HUDvisible: {fileID: 1927904597}
-  textovidajefe: {fileID: 1906593458}
+  textovidajefe: {fileID: 0}
 --- !u!1 &1968070208
 GameObject:
   m_ObjectHideFlags: 0

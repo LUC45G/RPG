@@ -92,7 +92,7 @@ public class Gamemanager : MonoBehaviour
 
         playerunit.isdefend = false;
         textannuncer.SetActive(true);
-        Actiontext.text = "¿Ya puedo irme a casa?";
+        Actiontext.text = "¿Can i go home?";
 
         yield return new WaitForSeconds(1f);
 
@@ -236,7 +236,7 @@ public class Gamemanager : MonoBehaviour
             }
             
             bool isdead = enemyunit.takedamage(playerunit.str*2);
-            enemyHUD.sethp(enemyunit.currentHP);
+            enemyHUD.sethpenemigo (enemyunit.currentHP);
 
             textannuncer.SetActive(true);
             Actiontext.text = "Haces " + playerunit.str*2 + " de daño!";
@@ -306,7 +306,7 @@ public class Gamemanager : MonoBehaviour
     IEnumerator playerattack()
     {
         bool isdead = enemyunit.takedamage(playerunit.str);
-        enemyHUD.sethp(enemyunit.currentHP);
+        enemyHUD.sethpenemigo(enemyunit.currentHP);
         textannuncer.SetActive(true);
         Actiontext.text = "Haces " + playerunit.str + " de daño!";
 
@@ -362,6 +362,7 @@ public class Gamemanager : MonoBehaviour
         else if (estado == Battlestates.LOST)
         {
             textannuncer.SetActive(true);
+            SceneManager.LoadScene(0);
             Actiontext.text = "Oh... bueno perdiste.";
         }
     }

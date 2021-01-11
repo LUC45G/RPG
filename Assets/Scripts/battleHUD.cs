@@ -32,9 +32,13 @@ public class battleHUD : MonoBehaviour
     public void sethp(int value)
     {
         HPSlider.value = value;
-        textovidajefe.text = value.ToString();
     }
 
+    public void sethpenemigo(int value)
+    {
+        HPSlider.value = value;
+        textovidajefe.text = value.ToString();
+    }
     public void setenergy(int value)
     {
         energySlider.value = value;
