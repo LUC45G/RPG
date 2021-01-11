@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public enum Battlestates{START, PLAYERTURN, PLAYERTURN2, ENEMYTURN, WON, LOST}
 
 public class Gamemanager : MonoBehaviour
 {
+    public GameObject pantallavictoria;
     [SerializeField] private Animator[] animaciones;
     public Battlestates estado;
     public GameObject[] playersPrefabs;
@@ -128,7 +130,7 @@ public class Gamemanager : MonoBehaviour
         if (isdead)
         {
             estado = Battlestates.LOST;
-            Endbattle();
+            StartCoroutine (Endbattle());
         }
         else
         {
@@ -246,7 +248,7 @@ public class Gamemanager : MonoBehaviour
             {
             //terminar combate
                 estado = Battlestates.WON;
-                Endbattle();
+                StartCoroutine (Endbattle());
             }
             else
             {
@@ -329,7 +331,7 @@ public class Gamemanager : MonoBehaviour
         {
             //terminar combate
             estado = Battlestates.WON;
-            Endbattle();
+            StartCoroutine (Endbattle());
         }
         else
         {
@@ -349,12 +351,13 @@ public class Gamemanager : MonoBehaviour
         
     }
 
-    void Endbattle()
+    IEnumerator Endbattle()
     {
         if (estado == Battlestates.WON)
         {
-            textannuncer.SetActive(true);
-            Actiontext.text = "¿Ganamos? bien necesito un café";
+            pantallavictoria.SetActive(true);
+            yield return new WaitForSeconds(5f);
+            SceneManager.LoadScene(0);
         }
         else if (estado == Battlestates.LOST)
         {
