@@ -14,6 +14,8 @@ public class Ally : MonoBehaviour
     public int currentEnergy;
     public bool isdefend = false;
 
+
+
     public bool takedamage(int damage)
     {
         currentHP -= damage;

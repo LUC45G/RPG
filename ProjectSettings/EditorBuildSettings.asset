@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/TopDown pero real.unity
     guid: d14aafb4425c38c47bd6e664903c1c13
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/Combate.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}
