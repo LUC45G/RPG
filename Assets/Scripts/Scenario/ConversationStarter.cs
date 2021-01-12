@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class ConversationStarter : Interactable
 {
@@ -8,6 +10,9 @@ public class ConversationStarter : Interactable
     [Space]
     [SerializeField] private Conversation conversation;
     [SerializeField] private Collider2D myCollider;
+
+    [Space] 
+    [SerializeField] private UnityEvent onConversationEnded;
     
     private bool _started;
 
@@ -21,9 +26,8 @@ public class ConversationStarter : Interactable
         sfxmanager.sfxinstance.Audio.PlayOneShot(sfxmanager.sfxinstance.dialogo);
         if(!IsInteractable) return;
         base.Interact();
-
-        _started = true;
-        HandleNextDialog();
+        
+        HandleFirstDialog();
         Unhover();
     }
 
@@ -47,6 +51,7 @@ public class ConversationStarter : Interactable
             _started = false;
             myCollider.enabled = false;
             Unhover();
+            onConversationEnded?.Invoke();
             return;
         }
         
@@ -61,6 +66,28 @@ public class ConversationStarter : Interactable
         act.SetActive(true);
 
         _currentActive = act;
+    }
+
+    private void HandleFirstDialog()
+    {
+        var d = conversation.GetNextDialog();
+
+        var dialog = d.Text;
+        var act = d.Actor;
+        var text = d.TextUI;
+
+        text.text = dialog;
+        act.SetActive(true);
+
+        _currentActive = act;
+        StartCoroutine(Asco());
+
+        IEnumerator Asco()
+        {
+            yield return new WaitForSeconds(.1f);
+            _started = true;
+        }
+            
     }
 
 }

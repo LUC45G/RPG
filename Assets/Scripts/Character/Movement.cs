@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework.Constraints;
 using UnityEngine;
 
@@ -6,7 +7,7 @@ public class Movement : MonoBehaviour
 {
     [Header("Variables")]
     [Space]
-    [SerializeField] private float gridSnap;
+    [SerializeField] private float speed;
 
     [Header("Components")] 
     [Space] 
@@ -43,6 +44,9 @@ public class Movement : MonoBehaviour
         }
         else if (ShouldMove(y)) 
             Move((int)Mathf.Sign(y), Vector3.up);
+        else
+            myAnimator.SetBool("Walking", false);
+        
     }
     
     private bool ShouldMove(float x)
@@ -56,9 +60,9 @@ public class Movement : MonoBehaviour
         {
             var current = myTransform.position;
             //Debug.DrawRay(current, _lastMovement * gridSnap, Color.blue);
-            var atSnap = Physics2D.Raycast(current, _lastMovement, gridSnap).collider;
-            var atDouble = Physics2D.Raycast(current, _lastMovement, gridSnap * 2).collider;
-            return atSnap ? atSnap : atDouble;
+            //var atSnap = Physics2D.Raycast(current, _lastMovement, .5f).collider;
+            /*var atDouble =*/ return Physics2D.Raycast(current, _lastMovement, .75f).collider;
+            //return atSnap ? atSnap : atDouble;
         }
     }
 
@@ -68,12 +72,15 @@ public class Movement : MonoBehaviour
     {
         var current = myTransform.position;
         var actualPosition = current;
-        var target = actualPosition + gridSnap * sign * dir;
+        var target = actualPosition + Time.fixedDeltaTime * speed * sign * dir;
         _lastMovement = dir * sign;
+        myRb.MovePosition(target);
+        myAnimator.SetBool("Walking", true);
         
-        _canMove = false;
-        _movementCoroutine = StartCoroutine(MoveTowards(target));
+        //_canMove = false;
+        //_movementCoroutine = StartCoroutine(MoveTowards(target));
     }
+    
 
     private IEnumerator MoveTowards(Vector3 target)
     {
@@ -88,9 +95,7 @@ public class Movement : MonoBehaviour
             myRb.MovePosition(Vector2.Lerp(current, target, t));
             current = myRb.position;
             yield return new WaitForEndOfFrame();
-            if (!(t > 1)) continue;
-            current = initial;
-            break;
+            if (t > .75f && !_canMove) _canMove = true; 
         }
         
         myRb.position = Round(current);
