@@ -11,6 +11,8 @@ public class battleHUD : MonoBehaviour
 
     public GameObject HUDvisible;
 
+    public Text textovidajefe;
+
     public void setHUD(Ally ally)
     {
         HUDvisible.SetActive(true);
@@ -24,6 +26,7 @@ public class battleHUD : MonoBehaviour
     {
         HPSlider.maxValue = enemy.maxHP;
         HPSlider.value = enemy.currentHP;
+        textovidajefe.text = enemy.currentHP.ToString();
     }
 
     public void sethp(int value)
@@ -31,6 +34,11 @@ public class battleHUD : MonoBehaviour
         HPSlider.value = value;
     }
 
+    public void sethpenemigo(int value)
+    {
+        HPSlider.value = value;
+        textovidajefe.text = value.ToString();
+    }
     public void setenergy(int value)
     {
         energySlider.value = value;

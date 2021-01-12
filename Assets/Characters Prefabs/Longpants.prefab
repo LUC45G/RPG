@@ -52,6 +52,7 @@ MonoBehaviour:
   maxEnergy: 35
   currentEnergy: 35
   isdefend: 0
+  animacionpersonaje: {fileID: 5175362910976086783}
 --- !u!1 &9218140018562993561
 GameObject:
   m_ObjectHideFlags: 0

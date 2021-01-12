@@ -13,6 +13,11 @@ public class sfxmanager : MonoBehaviour
     public AudioClip golpegolem;
     public AudioClip golemrugido;
 
+    public AudioClip dialogo;
+
+    public AudioClip tijeraattack;
+    public AudioClip grapespecial;
+
     public static sfxmanager sfxinstance;
 
     private void Awake() 
